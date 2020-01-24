@@ -11,24 +11,11 @@ function findById(id) {
     .select()
 }
 
-// function findSteps(id) {
-//   return schemesDb("schemes as s")
-//     .where({ id })
-//     .select("s.scheme_name", "s.step_number", "s.instructions")
-// }
-
 function findSteps(id) {
-  let { page = 1, limit = 100, sortby = 'id', sortdir = 'asc' } = id;
-  const offset = limit * (page - 1);
-
-  let rows = schemesDb('steps as s')
-    .join("schemes as sc", "s.scheme_id", "sc.id")
-    .orderBy(sortby, sortdir)
-    .limit(limit)
-    .offset(offset)
-    .select();
-
-  return rows;
+  return schemesDb("schemes as s")
+      .select("st.id", "s.scheme_name", "st.step_number", "st.instructions")
+      .join("steps as st", "s.id", "st.scheme_id")
+      .where("s.id", id)
 }
 
 async function add(scheme) {
